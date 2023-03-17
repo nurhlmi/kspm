@@ -21,7 +21,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Page from '../components/Page';
 import Loading from '../components/Loading';
-import fDateHijriah from '../utils/formatHijriah';
+import formatHijriah from '../utils/formatHijriah';
 
 const CustomCard = (props) => {
   const { name, time } = { ...props };
@@ -136,7 +136,7 @@ export default function Home() {
                     <Stack direction="row" spacing={1} mb={2}>
                       <Typography variant="h6">{moment().format('dddd, LL')}</Typography>
                       <Typography variant="h6" color="primary.main">
-                        ({fDateHijriah()})
+                        ({formatHijriah()})
                       </Typography>
                     </Stack>
                     <CustomCard name="Subuh" time={data.sholat.subuh} />
