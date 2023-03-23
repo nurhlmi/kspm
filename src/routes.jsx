@@ -1,19 +1,28 @@
 import { useRoutes } from 'react-router-dom';
 
-import AppBarHome from './layouts/AppBarHome';
-import DashboardLayout from './layouts/dashboard';
+import LandingPageLayout from './layouts/LandingPageLayout';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
+import AppLayout from './layouts/AppLayout';
+// import DashboardLayout from './layouts/dashboard';
 
-import Home from './pages/Home';
+// Landing Page
+import LandingPage from './pages/LandingPage';
 import JadwalSholat from './pages/JadwalSholat';
 
-import Blog from './pages/Blog';
-import User from './pages/User';
+// Auth
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
-import Products from './pages/Products';
-import DashboardApp from './pages/DashboardApp';
+
+// Dashboard
+// import Blog from './pages/Blog';
+// import User from './pages/User';
+// import Products from './pages/Products';
+// import DashboardApp from './pages/DashboardApp';
+
+// App
+import Home from './pages/app/Home';
+import Profile from './pages/app/Profile';
 
 // ----------------------------------------------------------------------
 
@@ -21,20 +30,10 @@ export default function Router() {
   return useRoutes([
     {
       path: '/',
-      element: <AppBarHome />,
+      element: <LandingPageLayout />,
       children: [
-        { path: '', element: <Home /> },
+        { path: '', element: <LandingPage /> },
         { path: 'jadwal-sholat', element: <JadwalSholat /> },
-      ],
-    },
-    {
-      path: '/dashboard',
-      element: <DashboardLayout />,
-      children: [
-        { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
       ],
     },
     {
@@ -45,6 +44,24 @@ export default function Router() {
         { path: 'register', element: <Register /> },
       ],
     },
+    {
+      path: 'app',
+      element: <AppLayout />,
+      children: [
+        { path: 'home', element: <Home /> },
+        { path: 'profile', element: <Profile /> },
+      ],
+    },
+    //  {
+    //    path: '/dashboard',
+    //    element: <DashboardLayout />,
+    //    children: [
+    //      { path: 'app', element: <DashboardApp /> },
+    //      { path: 'user', element: <User /> },
+    //      { path: 'products', element: <Products /> },
+    //      { path: 'blog', element: <Blog /> },
+    //    ],
+    //  },
     { path: '*', element: <NotFound replace /> },
   ]);
 }
