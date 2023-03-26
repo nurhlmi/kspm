@@ -42,7 +42,7 @@ export default function HighlightSholat() {
       const sholat = [jadwal.subuh, jadwal.dzuhur, jadwal.ashar, jadwal.maghrib, jadwal.isya];
 
       const currentTime = moment().valueOf();
-      const eventTime = moment(new Date('2023-03-21 15:14')).valueOf();
+      const eventTime = moment(new Date('2023-03-26 04:42')).valueOf();
       const diffTime = eventTime - currentTime;
 
       const duration = moment.duration(diffTime, 'milliseconds');

@@ -53,6 +53,15 @@ export default function CardSholat() {
   //   console.log(yesterday);
   //   console.log(new Date(tomorrow).valueOf());
 
+  //   const tercapai = () => {
+  //     let percentage = 0;
+  //     // eslint-disable-next-line array-callback-return
+  //     sholat.map((value) => {
+  //       percentage += value.progress;
+  //     });
+  //     return `${(percentage / 500) * 100}%`;
+  //   };
+
   return (
     <Card sx={{ mb: 3 }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" m={1.1}>
@@ -86,6 +95,7 @@ export default function CardSholat() {
             </Stack>
           </Stack>
         ))}
+        {/* <Typography>Tercapai: {tercapai()}</Typography> */}
       </CardContent>
     </Card>
   );

@@ -3,7 +3,6 @@ import {
   ChevronRightRounded,
   ColorLensRounded,
   EditRounded,
-  ForumRounded,
   GppMaybeRounded,
   HelpRounded,
   InfoRounded,
@@ -16,14 +15,10 @@ import { Avatar, Box, Card, CardActionArea, Container, Divider, IconButton, Stac
 import { Link as RouterLink } from 'react-router-dom';
 import AppPage from '../../components/AppPage';
 
-export default function Profile() {
+export default function Account() {
   const menu = [
     {
       child: [
-        {
-          title: 'Notifikasi',
-          icon: <NotificationsRounded color="action" />,
-        },
         {
           title: 'Ganti Tema',
           icon: <ColorLensRounded color="action" />,
@@ -37,25 +32,21 @@ export default function Profile() {
           icon: <GroupAddRounded color="action" />,
         },
         {
-          title: 'Tentang',
-          icon: <InfoRounded color="action" />,
+          title: 'Notifikasi',
+          icon: <NotificationsRounded color="action" />,
         },
-      ],
-    },
-    {
-      child: [
         {
           title: 'Bantuan',
           icon: <HelpRounded color="action" />,
         },
-        {
-          title: 'FAQ',
-          icon: <ForumRounded color="action" />,
-        },
       ],
     },
     {
       child: [
+        {
+          title: 'Tentang Aplikasi',
+          icon: <InfoRounded color="action" />,
+        },
         {
           //  title: 'Privacy Policy',
           title: 'Kebijakan Privasi',
@@ -78,24 +69,27 @@ export default function Profile() {
       ],
     },
   ];
+
   return (
-    <AppPage title="Profil">
+    <AppPage title="Akun">
       <Container>
         <Stack spacing={3} mt={3}>
           <Card>
-            <Stack direction="row" justifyContent="space-between" spacing={2} p={2}>
+            <Stack direction="row" justifyContent="space-between" spacing={2} py={2} pl={2} pr={1}>
               <Stack direction="row" spacing={2}>
                 <Avatar />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
                     Nur Hilmi
                   </Typography>
-                  <Typography color="text.secondary">nurhilmi.mail@gmail.com</Typography>
+                  <Typography color="text.secondary" variant="body2">
+                    nurhilmi.mail@gmail.com
+                  </Typography>
                 </Box>
               </Stack>
               <Box>
                 <IconButton>
-                  <EditRounded />
+                  <EditRounded fontSize="small" />
                 </IconButton>
               </Box>
             </Stack>
@@ -109,7 +103,7 @@ export default function Profile() {
                       {row.icon}
                       <Typography>{row.title}</Typography>
                     </Stack>
-                    <ChevronRightRounded />
+                    <ChevronRightRounded color="action" />
                   </Stack>
                   {key + 1 < value.child.length && <Divider sx={{ ml: 7 }} />}
                 </CardActionArea>

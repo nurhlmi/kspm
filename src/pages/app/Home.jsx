@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Box, Button, Card, CardActionArea, CardContent, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, Container, Grid, Stack, Typography } from '@mui/material';
+import CountdownSholat from '../../sections/CountdownSholat';
 import CardSholat from '../../sections/CardSholat';
+import AppPage from '../../components/AppPage';
 
 export default function Home() {
   const [menu] = useState([
@@ -31,7 +33,7 @@ export default function Home() {
   ]);
 
   return (
-    <>
+    <AppPage title="Beranda">
       <Box bgcolor="primary.main" color="#fff" height={200} pt={5}>
         <Container>
           <Stack direction="row" justifyContent="space-between">
@@ -49,43 +51,18 @@ export default function Home() {
         </Container>
       </Box>
       <Container>
-        <Card sx={{ mt: -9, mb: 3 }}>
-          <CardContent>
-            <Grid container spacing={3}>
-              <Grid item xs={3} align="center">
-                <img
-                  src={`/static/theme1/mosque.png`}
-                  alt="Ramadhan"
-                  style={{
-                    color: `red`,
-                  }}
-                />
-              </Grid>
-              <Grid item xs>
-                {/* <div>{data.countdown}</div> */}
-                <Typography variant="body2">1 Jam 5 menit menuju</Typography>
-                <Typography variant="h4" gutterBottom>
-                  {/* Ashar, {data.sholat[2]} */}
-                  Dzuhur, 12:05
-                </Typography>
-                <Button variant="outlined" size="small">
-                  Kab. Bogor
-                </Button>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+        <CountdownSholat sx={{ mt: -9, mb: 3 }} />
         <CardSholat />
         <Grid container spacing={3}>
           {menu.map((value, index) => (
             <Grid item xs={4} md={3} mb={1} key={index}>
-              <Stack alignItems="center">
+              <Stack alignItems="center" justifyContent="center">
                 <Card>
                   <CardActionArea align="center" sx={{ p: 3 }}>
                     <img src={`/static/theme1/${value.image}`} alt={value.title} width={40} />
                   </CardActionArea>
                 </Card>
-                <Typography variant="body2" fontWeight="bold" mt={1}>
+                <Typography variant="body2" fontWeight="bold" align="center" mt={1}>
                   {value.title}
                 </Typography>
               </Stack>
@@ -93,6 +70,6 @@ export default function Home() {
           ))}
         </Grid>
       </Container>
-    </>
+    </AppPage>
   );
 }

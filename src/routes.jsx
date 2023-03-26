@@ -22,7 +22,7 @@ import Register from './pages/Register';
 
 // App
 import Home from './pages/app/Home';
-import Profile from './pages/app/Profile';
+import Account from './pages/app/Account';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ export default function Router() {
       element: <AppLayout />,
       children: [
         { path: 'home', element: <Home /> },
-        { path: 'profile', element: <Profile /> },
+        { path: 'account', element: <Account /> },
       ],
     },
     //  {
