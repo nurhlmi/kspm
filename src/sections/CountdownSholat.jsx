@@ -31,20 +31,14 @@ import moment from 'moment';
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function CountdownSholat(props) {
-  // Memformat tanggal
-  const d = new Date();
-  const dd = String(d.getDate()).padStart(2, '0');
-
-  const [jadwalSholat, setJadwalSholat] = useState();
+  const [data, setData] = useState();
   const [params, setParams] = useState({
     location: '1204',
     date: moment().format('yyyy/MM/DD'),
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  const [today, setToday] = useState(Number(dd));
   const [next, setNext] = useState({ name: '', countDown: 0 });
+  const [error, setError] = useState(false);
+  const [complete, setComplete] = useState(false);
 
   // Fetch jadwal sholat
   useEffect(() => {
@@ -52,53 +46,63 @@ export default function CountdownSholat(props) {
     fetch(apiURL)
       .then((res) => res.json())
       .then(({ data }) => {
+        //   console.log(data);
         delete data.jadwal.tanggal;
         delete data.jadwal.imsak;
         delete data.jadwal.terbit;
         delete data.jadwal.dhuha;
         delete data.jadwal.date;
-        //   console.log(data);
-        setJadwalSholat(data);
+        setData(data);
       })
       .catch(() => {
-        setJadwalSholat(null);
+        setData(null);
         setError(true);
-        setLoading(false);
+        setComplete(false);
       });
-  }, [today, params]);
+  }, [params]);
 
   // Mengatur waktu tanggal, jam, hari ini.
   useEffect(() => {
     const tId = setTimeout(() => {
       // Sholat berikutnya.
-      if (jadwalSholat) {
-        if (loading) setLoading(false);
-        if (jadwalSholat.jadwal) {
+      if (data) {
+        if (!complete) setComplete(true);
+        if (data.jadwal) {
           // Mengambil sholat yang waktunya sudah paling dekat
-          const times = Object.values(jadwalSholat.jadwal)
+          const times = Object.values(data.jadwal)
             .map((v) => new Date(`${moment().format('yyyy-MM-DD')}T${v}`).getTime())
-            .map((v, i) => [Object.keys(jadwalSholat.jadwal)[i], v - Date.now()])
+            .map((v, i) => [Object.keys(data.jadwal)[i], v - Date.now()])
             .sort((a, b) => a[1] - b[1])
             .filter((v) => v[1] > 0);
 
-          // Memperbarui tanggal jika jadwal hari ini sudah selesai
-          if (times.length === 0) {
-            setToday(Number(dd) + 1);
+          const nextSubuh = new Date(`${moment().add(1, 'days').format('yyyy-MM-DD')}T${data.jadwal.subuh}`).getTime();
+          times.push(['subuh', nextSubuh - Date.now()]);
+
+          // Jika jadwal hari ini belum selesai
+          if (times.length > 0) {
+            // Mengatur countdown
+            const distance = times[0][1] + 60000;
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            //  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Memperbarui info sholat berikutnya
+            setNext({
+              name: times[0][0],
+              countDown: `${hours > 0 ? `${hours} jam` : ''} ${minutes > 0 ? `${minutes} menit` : ''} ${
+                hours > 0 || minutes > 0 ? 'menuju' : 'Waktunya sholat'
+              }`,
+            });
+          } else {
+            // Memperbarui tanggal jika jadwal hari ini sudah selesai
+            const date = new Date();
+            date.setDate(date.getDate() + 1);
+            // setData(undefined);
+            setParams({
+              ...params,
+              date: moment(date).format('yyyy/MM/DD'),
+            });
           }
-
-          // Mengatur countdown
-          const distance = times[0][1] + 60000;
-          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          //  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-          // Memperbarui info sholat berikutnya
-          setNext({
-            name: times[0][0],
-            countDown: `${hours > 0 ? `${hours} jam` : ''} ${minutes > 0 ? `${minutes} menit` : ''} ${
-              hours > 0 || minutes > 0 ? 'menuju' : 'Waktunya sholat'
-            }`,
-          });
         }
       }
     }, 1000);
@@ -108,13 +112,11 @@ export default function CountdownSholat(props) {
   const [search, setSearch] = useState('');
   const [location, setLocation] = useState();
   const getLocation = async () => {
-    await axios
-      .get(`https://api.myquran.com/v1/sholat/kota/cari/${search.length > 0 ? search : 'aceh'}`)
-      .then((res) => {
-        //   console.log(res.data.data);
-        const value = res.data.data;
-        setLocation(value !== undefined ? value : null);
-      });
+    await axios.get(`https://api.myquran.com/v1/sholat/kota/cari/${search.length > 0 ? search : 'a'}`).then((res) => {
+      //   console.log(res.data.data);
+      const value = res.data.data;
+      setLocation(value !== undefined ? value : null);
+    });
   };
 
   useEffect(() => {
@@ -140,13 +142,13 @@ export default function CountdownSholat(props) {
             <Grid item xs={3} align="center">
               <img src={`/static/theme1/mosque.png`} alt="Ramadhan" />
             </Grid>
-            {!loading ? (
+            {complete ? (
               <>
                 {!error ? (
                   <Grid item xs>
                     <Typography variant="body2">{next.countDown}</Typography>
                     <Typography variant="h4" textTransform="capitalize" gutterBottom>
-                      {next.name}, {jadwalSholat.jadwal[next.name]}
+                      {next.name}, {data?.jadwal[next.name]}
                     </Typography>
                     <Button
                       variant="outlined"
@@ -154,7 +156,7 @@ export default function CountdownSholat(props) {
                       startIcon={<PinDropRounded color="primary" fontSize="small" />}
                       onClick={handleDialog}
                     >
-                      {jadwalSholat.lokasi.toLowerCase()}
+                      {data?.lokasi.toLowerCase()}
                     </Button>
                   </Grid>
                 ) : (
@@ -192,6 +194,7 @@ export default function CountdownSholat(props) {
             <Typography variant="h6">Lokasi</Typography>
           </Stack>
           <TextField
+            id="search"
             size="small"
             placeholder="Cari kabupaten/kota"
             value={search}
@@ -204,7 +207,12 @@ export default function CountdownSholat(props) {
               ),
               endAdornment: search.length > 0 && (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setSearch('')}>
+                  <IconButton
+                    onClick={() => {
+                      setSearch('');
+                      document.getElementById('search').focus();
+                    }}
+                  >
                     <ClearRounded />
                   </IconButton>
                 </InputAdornment>
@@ -226,7 +234,7 @@ export default function CountdownSholat(props) {
                         onClick={() => {
                           handleDialog();
                           setParams({ ...params, location: value.id });
-                          setLoading(true);
+                          setComplete(true);
                         }}
                       >
                         <Stack direction="row" justifyContent="space-between" spacing={2} p={2}>
