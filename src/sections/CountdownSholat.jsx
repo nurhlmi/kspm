@@ -42,6 +42,7 @@ export default function CountdownSholat(props) {
 
   // Fetch jadwal sholat
   useEffect(() => {
+    setComplete(false);
     const apiURL = `https://api.myquran.com/v1/sholat/jadwal/${params.location}/${params.date}`;
     fetch(apiURL)
       .then((res) => res.json())
@@ -57,7 +58,7 @@ export default function CountdownSholat(props) {
       .catch(() => {
         setData(null);
         setError(true);
-        setComplete(false);
+        setComplete(true);
       });
   }, [params]);
 
