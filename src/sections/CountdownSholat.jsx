@@ -72,7 +72,7 @@ export default function CountdownSholat(props) {
           // Mengambil sholat yang waktunya sudah paling dekat
           const times = Object.values(data.jadwal)
             .map((v) => new Date(`${moment().format('yyyy-MM-DD')}T${v}`).getTime())
-            .map((v, i) => [Object.keys(data.jadwal)[i], v - Date.now()])
+            .map((v, i) => [Object.keys(data.jadwal)[i], v + 60000 - Date.now()])
             .sort((a, b) => a[1] - b[1])
             .filter((v) => v[1] > 0);
 
@@ -82,7 +82,7 @@ export default function CountdownSholat(props) {
           // Jika jadwal hari ini belum selesai
           if (times.length > 0) {
             // Mengatur countdown
-            const distance = times[0][1] + 60000;
+            const distance = times[0][1];
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             //  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
