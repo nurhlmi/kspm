@@ -87,7 +87,7 @@ export default function CountdownSholat(props) {
           }
 
           // Mengatur countdown
-          const distance = times[0][1];
+          const distance = times[0][1] + 60000;
           const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
           //  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
