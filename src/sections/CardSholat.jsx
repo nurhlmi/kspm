@@ -47,11 +47,9 @@ export default function CardSholat() {
 
   const [date, setDate] = useState(moment(new Date()).format('yyyy-MM-DD'));
   const yesterday = ((d) => moment(new Date(d.setDate(d.getDate() - 1))).format('yyyy-MM-DD'))(new Date(date));
-  const tomorrow = ((d) => moment(new Date(d.setDate(d.getDate() + 1))).format('yyyy-MM-DD'))(new Date(date));
-  //   console.clear();
-  //   console.log(new Date(date).valueOf());
-  //   console.log(yesterday);
-  //   console.log(new Date(tomorrow).valueOf());
+  const tomorrow7 = ((d) => moment(new Date(d.setDate(d.getDate() + 1))).format('yyyy-MM-DD'))(new Date(date));
+  const tomorrow0 = new Date(tomorrow7);
+  const tomorrow = tomorrow0.setHours(tomorrow0.getHours() - 7);
 
   //   const tercapai = () => {
   //     let percentage = 0;
